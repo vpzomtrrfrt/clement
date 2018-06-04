@@ -1,4 +1,5 @@
 node_modules
 /work
-/repos
+/repos/*
+!/repos/README.txt
 /allowed_keys.txt
