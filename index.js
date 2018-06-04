@@ -2,18 +2,18 @@ const http = require('http');
 const qs = require('querystring');
 const fs = require('fs');
 const path = require('path');
+const util = require('util');
 const childProcess = require('child_process');
-const bluebird = require('bluebird');
 
-bluebird.promisifyAll(childProcess);
+const execAsync = util.promisify(childProcess.exec);
 
 const keys = fs.readFileSync("./allowed_keys.txt").toString().split("\n");
 
 function updateMirror(repo) {
 	const wd = path.join(__dirname, "repos", repo + ".git");
 	console.log("wd:", wd);
-	childProcess.execAsync("git fetch origin", {cwd: wd})
-		.then(() => childProcess.execAsync("git push --mirror target", {cwd: wd}))
+	execAsync("git fetch origin", {cwd: wd})
+		.then(() => execAsync("git push --mirror target", {cwd: wd}))
 		.then(() => console.log("updated", repo),
 			console.error);
 }
